@@ -27,8 +27,8 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 
 /**
  * Set option $name to $value in the database
- * @param string $name
- * @param string $value
+ * @param $name
+ * @param $value
  */
 function qa_db_set_option($name, $value)
 {

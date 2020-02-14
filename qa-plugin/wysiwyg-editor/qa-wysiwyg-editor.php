@@ -57,12 +57,46 @@ class qa_wysiwyg_editor
 			'wysiwyg_editor_upload_max_size_display' => 'wysiwyg_editor_upload_images_field',
 		));
 
+		// handle AJAX requests to 'wysiwyg-editor-ajax'
+		$js = array(
+			'function wysiwyg_editor_ajax(totalEdited) {',
+			'	$.ajax({',
+			'		url: ' . qa_js(qa_path('wysiwyg-editor-ajax')) . ',',
+			'		success: function(response) {',
+			'			var postsEdited = parseInt(response, 10);',
+			'			var $btn = $("#wysiwyg_editor_ajax");',
+			'			if (isNaN(postsEdited)) {',
+			'				$btn.text("ERROR");',
+			'			}',
+			'			else if (postsEdited < 5) {',
+			'				$btn.text("All posts converted.");',
+			'			}',
+			'			else {',
+			'				totalEdited += postsEdited;',
+			'				$btn.text("Updating posts... " + totalEdited)',
+			'				window.setTimeout(function() {',
+			'					wysiwyg_editor_ajax(totalEdited);',
+			'				}, 1000);',
+			'			}',
+			'		}',
+			'	});',
+			'}',
+
+			'$("#wysiwyg_editor_ajax").click(function() {',
+			'	wysiwyg_editor_ajax(0);',
+			'	return false;',
+			'});',
+		);
+		$ajaxHtml = 'Update broken images from old CKeditor Smiley plugin: ' .
+			'<button id="wysiwyg_editor_ajax">click here</button> ' .
+			'<script>' . implode("\n", $js) . '</script>';
+
 		return array(
-			'ok' => $saved ? qa_lang_html('admin/options_saved') : null,
+			'ok' => $saved ? 'WYSIWYG editor settings saved' : null,
 
 			'fields' => array(
 				array(
-					'label' => qa_lang_html('wysiwyg/allow_images'),
+					'label' => 'Allow images to be uploaded',
 					'type' => 'checkbox',
 					'value' => (int)qa_opt('wysiwyg_editor_upload_images'),
 					'tags' => 'name="wysiwyg_editor_upload_images_field" id="wysiwyg_editor_upload_images_field"',
@@ -70,7 +104,7 @@ class qa_wysiwyg_editor
 
 				array(
 					'id' => 'wysiwyg_editor_upload_all_display',
-					'label' => qa_lang_html('wysiwyg/allow_other_content'),
+					'label' => 'Allow other content to be uploaded, e.g. Flash, PDF',
 					'type' => 'checkbox',
 					'value' => (int)qa_opt('wysiwyg_editor_upload_all'),
 					'tags' => 'name="wysiwyg_editor_upload_all_field"',
@@ -78,17 +112,22 @@ class qa_wysiwyg_editor
 
 				array(
 					'id' => 'wysiwyg_editor_upload_max_size_display',
-					'label' => qa_lang_html('wysiwyg/maximum_size'),
-					'suffix' => qa_lang_html_sub('wysiwyg/mb_max_x', qa_html(number_format($this->bytes_to_mega(qa_get_max_upload_size()), 1))),
+					'label' => 'Maximum size of uploads:',
+					'suffix' => 'MB (max '.qa_html(number_format($this->bytes_to_mega(qa_get_max_upload_size()), 1)).')',
 					'type' => 'number',
 					'value' => qa_html(number_format($this->bytes_to_mega(qa_opt('wysiwyg_editor_upload_max_size')), 1)),
 					'tags' => 'name="wysiwyg_editor_upload_max_size_field"',
+				),
+
+				array(
+					'type' => 'custom',
+					'html' => $ajaxHtml,
 				),
 			),
 
 			'buttons' => array(
 				array(
-					'label' => qa_lang_html('main/save_button'),
+					'label' => 'Save Changes',
 					'tags' => 'name="wysiwyg_editor_save_button"',
 				),
 			),

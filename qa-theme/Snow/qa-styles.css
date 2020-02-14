@@ -1236,11 +1236,11 @@ div.header-banner {
 	margin-top: 0;
 }
 
-.qa-form-tall-text, .qa-form-tall-number, .qa-form-tall-email {
+.qa-form-tall-text, .qa-form-tall-number {
 	padding: 3px;
 }
 
-.qa-form-tall-text, .qa-form-tall-email {
+.qa-form-tall-text {
 	background: #fff;
 	color: #666;
 	width: 100%;
@@ -1376,11 +1376,11 @@ div.header-banner {
 	padding: 6px 10px;
 }
 
-.qa-form-wide-text, .qa-form-wide-number, .qa-form-wide-email {
+.qa-form-wide-text, .qa-form-wide-number {
 	padding: 3px;
 }
 
-.qa-form-wide-text, .qa-form-wide-email {
+.qa-form-wide-text {
 	background: #fff;
 	width: 320px;
 	border: 1px solid #ccc;

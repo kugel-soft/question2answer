@@ -19,8 +19,15 @@
 */
 
 /**
- * Snow theme HTML customizations
+ * Snow theme extends
  *
+ * Extends the core theme class <code>qa_html_theme_base</code>
+ *
+ * @package qa_html_theme_base
+ * @subpackage qa_html_theme
+ * @category Theme
+ * @since Snow 1.0
+ * @version 1.4
  * @author Q2A Market <http://www.q2amarket.com>
  * @copyright (c) 2014, Q2A Market
  * @license http://www.gnu.org/copyleft/gpl.html
@@ -47,6 +54,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Adding aditional meta for responsive design
+	 *
+	 * @since Snow 1.4
 	 */
 	public function head_metas()
 	{
@@ -56,6 +65,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Adding theme stylesheets
+	 *
+	 * @since Snow 1.4
 	 */
 	public function head_css()
 	{
@@ -103,6 +114,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Adding theme javascripts
+	 *
+	 * @since Snow 1.4
 	 */
 	public function head_script()
 	{
@@ -114,6 +127,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Adding point count for logged in user
+	 *
+	 * @since Snow 1.4
 	 */
 	public function logged_in()
 	{
@@ -130,6 +145,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Adding body class dynamically. Override needed to add class on admin/approve-users page
+	 *
+	 * @since Snow 1.4
 	 */
 	public function body_tags()
 	{
@@ -154,6 +171,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Login form for user dropdown menu.
+	 *
+	 * @since Snow 1.4
 	 */
 	public function nav_user_search()
 	{
@@ -167,11 +186,9 @@ class qa_html_theme extends qa_html_theme_base
 		if (!qa_is_logged_in()) {
 			if (isset($this->content['navigation']['user']['login']) && !QA_FINAL_EXTERNAL_USERS) {
 				$login = $this->content['navigation']['user']['login'];
-				$emailOnly = qa_opt('allow_login_email_only');
-				$inputType = $emailOnly ? 'email' : 'text';
 				$this->output(
 					'<form action="' . $login['url'] . '" method="post">',
-						'<input type="' . $inputType . '" name="emailhandle" dir="auto" placeholder="' . trim(qa_lang_html($emailOnly ? 'users/email_label' : 'users/email_handle_label'), ':') . '"/>',
+						'<input type="text" name="emailhandle" dir="auto" placeholder="' . trim(qa_lang_html(qa_opt('allow_login_email_only') ? 'users/email_label' : 'users/email_handle_label'), ':') . '"/>',
 						'<input type="password" name="password" dir="auto" placeholder="' . trim(qa_lang_html('users/password_label'), ':') . '"/>',
 						'<div><input type="checkbox" name="remember" id="qam-rememberme" value="1"/>',
 						'<label for="qam-rememberme">' . qa_lang_html('users/remember') . '</label></div>',
@@ -192,6 +209,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Modify markup for topbar.
+	 *
+	 * @since Snow 1.4
 	 */
 	public function nav_main_sub()
 	{
@@ -206,6 +225,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Remove the '-' from the note for the category page (notes).
+	 *
+	 * @since Snow 1.4
 	 * @param array $navlink
 	 * @param string $class
 	 */
@@ -224,6 +245,8 @@ class qa_html_theme extends qa_html_theme_base
 	 * - Swaps the <tt>main()</tt> and <tt>sidepanel()</tt> functions
 	 * - Moves the header and footer functions outside qa-body-wrapper
 	 * - Keeps top/high and low/bottom widgets separated
+	 *
+	 * @since Snow 1.4
 	 */
 	public function body_content()
 	{
@@ -238,8 +261,9 @@ class qa_html_theme extends qa_html_theme_base
 		$this->widgets('full', 'high');
 
 		$this->output('<div class="qa-main-wrapper">', '');
-		$this->main();
 		$this->sidepanel();
+		$this->main();
+		
 		$this->output('</div> <!-- END main-wrapper -->');
 
 		$this->widgets('full', 'low');
@@ -252,6 +276,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Header in full width top bar
+	 *
+	 * @since Snow 1.4
 	 */
 	public function header()
 	{
@@ -268,6 +294,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Footer in full width bottom bar
+	 *
+	 * @since Snow 1.4
 	 */
 	public function footer()
 	{
@@ -282,21 +310,9 @@ class qa_html_theme extends qa_html_theme_base
 	}
 
 	/**
-	 * Adds placeholder "Search..." for search box
-	 */
-	public function search_field($search)
-	{
-		$this->output(
-			sprintf('<input type="text" placeholder="%s..." %s value="%s" class="qa-search-field"/>',
-				$search['button_label'],
-				$search['field_tags'],
-				isset($search['value']) ? $search['value'] : ''
-			)
-		);
-	}
-
-	/**
 	 * Overridden to customize layout and styling
+	 *
+	 * @since Snow 1.4
 	 */
 	public function sidepanel()
 	{
@@ -308,18 +324,27 @@ class qa_html_theme extends qa_html_theme_base
 		$this->output('<div class="qa-sidepanel" id="qam-sidepanel-mobile">');
 		$this->qam_search();
 		$this->widgets('side', 'top');
-		$this->sidebar();
+		
+		/* Disable sidebar */
+		// $this->sidebar();
+		
 		$this->widgets('side', 'high');
 		$this->widgets('side', 'low');
-		if (isset($this->content['sidepanel']))
+		if (isset($this->content['sidepanel'])) {
 			$this->output_raw($this->content['sidepanel']);
-		$this->feed();
+		}
+
+		/* Disable feed */
+		// $this->feed();
+
 		$this->widgets('side', 'bottom');
 		$this->output('</div> <!-- qa-sidepanel -->', '');
 	}
 
 	/**
 	 * Allow alternate sidebar color.
+	 *
+	 * @since Snow 1.4
 	 */
 	public function sidebar()
 	{
@@ -335,6 +360,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Add close icon
+	 *
+	 * @since Snow 1.4
 	 * @param array $q_item
 	 */
 	public function q_item_title($q_item)
@@ -370,6 +397,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Add closed icon for closed questions
+	 *
+	 * @since Snow 1.4
 	 */
 	public function title()
 	{
@@ -396,6 +425,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Add view counter to question list
+	 *
+	 * @since Snow 1.4
 	 * @param array $q_item
 	 */
 	public function q_item_stats($q_item)
@@ -411,6 +442,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Prevent display view counter on usual place
+	 *
+	 * @since Snow 1.4
 	 * @param array $q_item
 	 */
 	public function view_count($q_item)
@@ -420,6 +453,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Add view counter to question view
+	 *
+	 * @since Snow 1.4
 	 * @param array $q_view
 	 */
 	public function q_view_stats($q_view)
@@ -435,6 +470,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Modify user whometa, move to top
+	 *
+	 * @since Snow 1.4
 	 * @param array $q_view
 	 */
 	public function q_view_main($q_view)
@@ -481,6 +518,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Move user whometa to top in answer
+	 *
+	 * @since Snow 1.4
 	 * @param array $a_item
 	 */
 	public function a_item_main($a_item)
@@ -538,6 +577,8 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Move user whometa to top in comment, add comment voting back in
+	 *
+	 * @since Snow 1.4
 	 * @param array $c_item
 	 */
 	public function c_item_main($c_item)
@@ -582,6 +623,8 @@ class qa_html_theme extends qa_html_theme_base
 	/**
 	 * Q2A Market attribution.
 	 * I'd really appreciate you displaying this link on your Q2A site. Thank you - Jatin
+	 *
+	 * @since Snow 1.4
 	 */
 	public function attribution()
 	{
@@ -598,6 +641,8 @@ class qa_html_theme extends qa_html_theme_base
 	 * User account navigation item. This will return based on login information.
 	 * If user is logged in, it will populate user avatar and account links.
 	 * If user is guest, it will populate login form and registration link.
+	 *
+	 * @since Snow 1.4
 	 */
 	private function qam_user_account()
 	{
@@ -644,6 +689,9 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Add search-box wrapper with extra class for color scheme
+	 *
+	 * @since Snow 1.4
+	 * @version 1.0
 	 * @param string $addon_class
 	 * @param string $ids
 	 */
@@ -658,7 +706,10 @@ class qa_html_theme extends qa_html_theme_base
 
 
 	/**
-	 * Dynamic CSS based on options and other interaction with Q2A.
+	 * Dynamic <code>CSS</code> based on options and other interaction with Q2A.
+	 *
+	 * @since Snow 1.4
+	 * @version 1.0
 	 * @return string The CSS code
 	 */
 	private function head_inline_css()
@@ -685,6 +736,10 @@ class qa_html_theme extends qa_html_theme_base
 
 	/**
 	 * Custom ask button for medium and small screen
+	 *
+	 * @access private
+	 * @since Snow 1.4
+	 * @version 1.0
 	 * @return string Ask button html markup
 	 */
 	private function ask_button()
@@ -699,5 +754,15 @@ class qa_html_theme extends qa_html_theme_base
 			'<div class="qam-search-mobile ' . $this->ask_search_box_class . '" id="qam-search-mobile">' .
 			'</div>' .
 			'</div>';
+	}
+
+	/**
+	 * Adds placeholder "Search..." for search box
+	 *
+	 * @since Snow 1.4
+	 */
+	public function search_field($search)
+	{
+		$this->output('<input type="text" ' .'placeholder="' . $search['button_label'] . '..." ' . $search['field_tags'] . ' value="' . @$search['value'] . '" class="qa-search-field"/>');
 	}
 }

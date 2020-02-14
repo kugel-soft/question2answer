@@ -31,10 +31,10 @@ class qa_recaptcha_captcha
 
 		// human-readable error messages (though these are not currently displayed anywhere)
 		$this->errorCodeMessages = array(
-			'missing-input-secret' => qa_lang_html('recaptcha/missing_secret'),
-			'invalid-input-secret' => qa_lang_html('recaptcha/invalid_secret'),
-			'missing-input-response' => qa_lang_html('recaptcha/missing_response'),
-			'invalid-input-response' => qa_lang_html('recaptcha/invalid_response'),
+			'missing-input-secret' => 'The secret parameter is missing.',
+			'invalid-input-secret' => 'The secret parameter is invalid or malformed.',
+			'missing-input-response' => 'The response parameter is missing.',
+			'invalid-input-response' => 'The response parameter is invalid or malformed.',
 		);
 	}
 
@@ -55,24 +55,21 @@ class qa_recaptcha_captcha
 		$error = null;
 		if (!strlen($pub) || !strlen($pri)) {
 			require_once $this->directory.'recaptchalib.php';
-			$error = strtr(qa_lang_html('recaptcha/must_sign_up'), array(
-				'^1' => '<a href="'.qa_html(ReCaptcha::getSignupUrl()).'" target="_blank">',
-				'^2' => '</a>'
-			));
+			$error = 'To use reCAPTCHA, you must <a href="'.qa_html(ReCaptcha::getSignupUrl()).'" target="_blank">sign up</a> to get these keys.';
 		}
 
 		$form = array(
-			'ok' => $saved ? qa_lang_html('admin/options_saved') : null,
+			'ok' => $saved ? 'reCAPTCHA settings saved' : null,
 
 			'fields' => array(
 				'public' => array(
-					'label' => qa_lang_html('recaptcha/site_key'),
+					'label' => 'reCAPTCHA Site key:',
 					'value' => $pub,
 					'tags' => 'name="recaptcha_public_key_field"',
 				),
 
 				'private' => array(
-					'label' => qa_lang_html('recaptcha/secret_key'),
+					'label' => 'reCAPTCHA Secret key:',
 					'value' => $pri,
 					'tags' => 'name="recaptcha_private_key_field"',
 					'error' => $error,
@@ -81,7 +78,7 @@ class qa_recaptcha_captcha
 
 			'buttons' => array(
 				array(
-					'label' => qa_lang_html('main/save_button'),
+					'label' => 'Save Changes',
 					'tags' => 'name="recaptcha_save_button"',
 				),
 			),

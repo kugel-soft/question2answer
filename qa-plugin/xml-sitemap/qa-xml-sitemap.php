@@ -59,11 +59,11 @@ class qa_xml_sitemap
 		}
 
 		$form = array(
-			'ok' => $saved ? qa_lang_html('admin/options_saved') : null,
+			'ok' => $saved ? 'XML sitemap settings saved' : null,
 
 			'fields' => array(
 				'questions' => array(
-					'label' => qa_lang_html('xml_sitemap/include_q_pages'),
+					'label' => 'Include question pages',
 					'type' => 'checkbox',
 					'value' => (int)qa_opt('xml_sitemap_show_questions'),
 					'tags' => 'name="xml_sitemap_show_questions_field"',
@@ -72,7 +72,7 @@ class qa_xml_sitemap
 
 			'buttons' => array(
 				array(
-					'label' => qa_lang_html('main/save_button'),
+					'label' => 'Save Changes',
 					'tags' => 'name="xml_sitemap_save_button"',
 				),
 			),
@@ -80,7 +80,7 @@ class qa_xml_sitemap
 
 		if (!QA_FINAL_EXTERNAL_USERS) {
 			$form['fields']['users'] = array(
-				'label' => qa_lang_html('xml_sitemap/include_user_pages'),
+				'label' => 'Include user pages',
 				'type' => 'checkbox',
 				'value' => (int)qa_opt('xml_sitemap_show_users'),
 				'tags' => 'name="xml_sitemap_show_users_field"',
@@ -89,7 +89,7 @@ class qa_xml_sitemap
 
 		if (qa_using_tags()) {
 			$form['fields']['tagqs'] = array(
-				'label' => qa_lang_html('xml_sitemap/include_ql_tag'),
+				'label' => 'Include question list for each tag',
 				'type' => 'checkbox',
 				'value' => (int)qa_opt('xml_sitemap_show_tag_qs'),
 				'tags' => 'name="xml_sitemap_show_tag_qs_field"',
@@ -98,14 +98,14 @@ class qa_xml_sitemap
 
 		if (qa_using_categories()) {
 			$form['fields']['categoryqs'] = array(
-				'label' => qa_lang_html('xml_sitemap/include_ql_category'),
+				'label' => 'Include question list for each category',
 				'type' => 'checkbox',
 				'value' => (int)qa_opt('xml_sitemap_show_category_qs'),
 				'tags' => 'name="xml_sitemap_show_category_qs_field"',
 			);
 
 			$form['fields']['categories'] = array(
-				'label' => qa_lang_html('xml_sitemap/include_cat_browser'),
+				'label' => 'Include category browser',
 				'type' => 'checkbox',
 				'value' => (int)qa_opt('xml_sitemap_show_categories'),
 				'tags' => 'name="xml_sitemap_show_categories_field"',
@@ -120,7 +120,7 @@ class qa_xml_sitemap
 	{
 		return array(
 			array(
-				'title' => qa_lang_html('xml_sitemap/xml_sitemap'),
+				'title' => 'XML Sitemap',
 				'request' => 'sitemap.xml',
 				'nav' => null, // 'M'=main, 'F'=footer, 'B'=before main, 'O'=opposite main, null=none
 			),

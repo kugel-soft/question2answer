@@ -19,8 +19,6 @@
 	More about this license: http://www.question2answer.org/license.php
 */
 
-use Q2A\Exceptions\FatalErrorException;
-
 if (!defined('QA_VERSION')) { // don't allow this page to be requested directly from browser
 	header('Location: ../../');
 	exit;
@@ -41,9 +39,9 @@ if (!defined('QA_NEW_PASSWORD_LEN')){
 /**
  * Return $errors fields for any invalid aspect of user-entered $handle (username) and $email. Works by calling through
  * to all filter modules and also rejects existing values in database unless they belongs to $olduser (if set).
- * @param string $handle
- * @param string $email
- * @param array $olduser
+ * @param $handle
+ * @param $email
+ * @param $olduser
  * @return array
  */
 function qa_handle_email_filter(&$handle, &$email, $olduser = null)
@@ -95,7 +93,7 @@ function qa_handle_email_filter(&$handle, &$email, $olduser = null)
 
 /**
  * Make $handle valid and unique in the database - if $allowuserid is set, allow it to match that user only
- * @param string $handle
+ * @param $handle
  * @return string
  */
 function qa_handle_make_valid($handle)
@@ -141,8 +139,8 @@ function qa_handle_make_valid($handle)
 /**
  * Return an array with a single element (key 'password') if user-entered $password is valid, otherwise an empty array.
  * Works by calling through to all filter modules.
- * @param string $password
- * @param array $olduser
+ * @param $password
+ * @param $olduser
  * @return array
  */
 function qa_password_validate($password, $olduser = null)
@@ -173,9 +171,9 @@ function qa_password_validate($password, $olduser = null)
  * Create a new user (application level) with $email, $password, $handle and $level.
  * Set $confirmed to true if the email address has been confirmed elsewhere.
  * Handles user points, notification and optional email confirmation.
- * @param string $email
- * @param string|null $password
- * @param string $handle
+ * @param $email
+ * @param $password
+ * @param $handle
  * @param int $level
  * @param bool $confirmed
  * @return mixed
@@ -234,7 +232,7 @@ function qa_create_new_user($email, $password, $handle, $level = QA_USER_LEVEL_B
 /**
  * Delete $userid and all their votes and flags. Their posts will become anonymous.
  * Handles recalculations of votes and flags for posts this user has affected.
- * @param mixed $userid
+ * @param $userid
  * @return mixed
  */
 function qa_delete_user($userid)
@@ -267,7 +265,7 @@ function qa_delete_user($userid)
 
 /**
  * Set a new email confirmation code for the user and send it out
- * @param mixed $userid
+ * @param $userid
  * @return mixed
  */
 function qa_send_new_confirm($userid)
@@ -294,10 +292,10 @@ function qa_send_new_confirm($userid)
 /**
  * Set a new email confirmation code for the user and return the corresponding link. If the email code is also sent then that value
  * is used. Otherwise, a new email code is generated
- * @param mixed $userid
- * @param string $handle
- * @param string $emailcode
- * @return string
+ * @param $userid
+ * @param $handle
+ * @param $emailcode
+ * @return mixed|string
  */
 function qa_get_new_confirm_url($userid, $handle, $emailcode = null)
 {
@@ -316,9 +314,9 @@ function qa_get_new_confirm_url($userid, $handle, $emailcode = null)
 
 /**
  * Complete the email confirmation process for the user
- * @param mixed $userid
- * @param string $email
- * @param string $handle
+ * @param $userid
+ * @param $email
+ * @param $handle
  * @return mixed
  */
 function qa_complete_confirm($userid, $email, $handle)
@@ -341,10 +339,10 @@ function qa_complete_confirm($userid, $email, $handle)
 /**
  * Set the user level of user $userid with $handle to $level (one of the QA_USER_LEVEL_* constraints in /qa-include/app/users.php)
  * Pass the previous user level in $oldlevel. Reports the appropriate event, assumes change performed by the logged in user.
- * @param mixed $userid
- * @param string $handle
- * @param int $level
- * @param int $oldlevel
+ * @param $userid
+ * @param $handle
+ * @param $level
+ * @param $oldlevel
  */
 function qa_set_user_level($userid, $handle, $level, $oldlevel)
 {
@@ -370,9 +368,9 @@ function qa_set_user_level($userid, $handle, $level, $oldlevel)
 /**
  * Set the status of user $userid with $handle to blocked if $blocked is true, otherwise to unblocked. Reports the appropriate
  * event, assumes change performed by the logged in user.
- * @param mixed $userid
- * @param string $handle
- * @param string $blocked
+ * @param $userid
+ * @param $handle
+ * @param $blocked
  */
 function qa_set_user_blocked($userid, $handle, $blocked)
 {
@@ -390,7 +388,7 @@ function qa_set_user_blocked($userid, $handle, $blocked)
 
 /**
  * Start the 'I forgot my password' process for $userid, sending reset code
- * @param mixed $userid
+ * @param $userid
  * @return mixed
  */
 function qa_start_reset_user($userid)
@@ -417,8 +415,9 @@ function qa_start_reset_user($userid)
 
 /**
  * Successfully finish the 'I forgot my password' process for $userid, sending new password
+ *
  * @deprecated This function has been replaced by qa_finish_reset_user since Q2A 1.8
- * @param mixed $userid
+ * @param $userid
  * @return mixed
  */
 function qa_complete_reset_user($userid)
@@ -455,7 +454,7 @@ function qa_complete_reset_user($userid)
  * Successfully finish the 'I forgot my password' process for $userid, cleaning the emailcode field and logging in the user
  * @param mixed $userId The userid identifiying the user who will have the password reset
  * @param string $newPassword The new password for the user
- * @return mixed
+ * @return void
  */
 function qa_finish_reset_user($userId, $newPassword)
 {
@@ -502,9 +501,9 @@ function qa_logged_in_user_flush()
 
 /**
  * Set the avatar of $userid to the image in $imagedata, and remove $oldblobid from the database if not null
- * @param mixed $userid
- * @param string $imagedata
- * @param string $oldblobid
+ * @param $userid
+ * @param $imagedata
+ * @param $oldblobid
  * @return bool
  */
 function qa_set_user_avatar($userid, $imagedata, $oldblobid = null)

@@ -38,60 +38,29 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 
 class qa_html_theme_base
 {
-	/** @var string */
 	public $template;
-
-	/** @var array */
 	public $content;
-
-	/** @var string */
 	public $rooturl;
-
-	/** @var string */
 	public $request;
+	public $isRTL; // (boolean) whether text direction is Right-To-Left
 
-	/**
-	 * Whether text direction is Right-To-Left
-	 *
-	 * @var bool
-	 */
-	public $isRTL;
-
-	/**
-	 * Whether to indent the HTML
-	 *
-	 * @var bool
-	 */
-	protected $minifyHtml;
-
-	/** @var int */
+	protected $minifyHtml; // (boolean) whether to indent the HTML
 	protected $indent = 0;
-
-	/** @var int */
 	protected $lines = 0;
-
-	/** @var array */
 	protected $context = array();
 
-	/**
-	 * Whether to use new block layout in rankings (true) or fall back to tables (false)
-	 * @var bool
-	 */
+	// whether to use new block layout in rankings (true) or fall back to tables (false)
 	protected $ranking_block_layout = false;
-
-	/**
-	 * Theme 'slug' to use as CSS class
-	 * @var string
-	 */
+	// theme 'slug' to use as CSS class
 	protected $theme;
 
 
 	/**
 	 * Initialize the object and assign local variables.
-	 * @param string $template
-	 * @param string $content
-	 * @param string $rooturl
-	 * @param string $request
+	 * @param $template
+	 * @param $content
+	 * @param $rooturl
+	 * @param $request
 	 */
 	public function __construct($template, $content, $rooturl, $request)
 	{
@@ -106,10 +75,10 @@ class qa_html_theme_base
 	/**
 	 * @deprecated PHP4-style constructor deprecated from 1.7; please use proper `__construct`
 	 * function instead.
-	 * @param string $template
-	 * @param string $content
-	 * @param string $rooturl
-	 * @param string $request
+	 * @param $template
+	 * @param $content
+	 * @param $rooturl
+	 * @param $request
 	 */
 	public function qa_html_theme_base($template, $content, $rooturl, $request)
 	{
@@ -121,7 +90,7 @@ class qa_html_theme_base
 	 * Output each element in $elements on a separate line, with automatic HTML indenting.
 	 * This should be passed markup which uses the <tag/> form for unpaired tags, to help keep
 	 * track of indenting, although its actual output converts these to <tag> for W3C validation.
-	 * @param array $elements
+	 * @param $elements
 	 */
 	public function output_array($elements)
 	{
@@ -163,7 +132,7 @@ class qa_html_theme_base
 	/**
 	 * Output $html at the current indent level, but don't change indent level based on the markup within.
 	 * Useful for user-entered HTML which is unlikely to follow the rules we need to track indenting.
-	 * @param string $html
+	 * @param $html
 	 */
 	public function output_raw($html)
 	{
@@ -175,8 +144,8 @@ class qa_html_theme_base
 	/**
 	 * Output the three elements ['prefix'], ['data'] and ['suffix'] of $parts (if they're defined),
 	 * with appropriate CSS classes based on $class, using $outertag and $innertag in the markup.
-	 * @param array $parts
-	 * @param string $class
+	 * @param $parts
+	 * @param $class
 	 * @param string $outertag
 	 * @param string $innertag
 	 * @param string $extraclass
@@ -198,8 +167,8 @@ class qa_html_theme_base
 
 	/**
 	 * Set some context, which be accessed via $this->context for a function to know where it's being used on the page.
-	 * @param string $key
-	 * @param string $value
+	 * @param $key
+	 * @param $value
 	 */
 	public function set_context($key, $value)
 	{
@@ -209,7 +178,7 @@ class qa_html_theme_base
 
 	/**
 	 * Clear some context (used at the end of the appropriate loop).
-	 * @param string $key
+	 * @param $key
 	 */
 	public function clear_context($key)
 	{
@@ -220,8 +189,8 @@ class qa_html_theme_base
 	/**
 	 * Reorder the parts of the page according to the $parts array which contains part keys in their new order. Call this
 	 * before main_parts(). See the docs for qa_array_reorder() in util/sort.php for the other parameters.
-	 * @param array $parts
-	 * @param string|null $beforekey
+	 * @param $parts
+	 * @param string $beforekey
 	 * @param bool $reorderrelative
 	 */
 	public function reorder_parts($parts, $beforekey = null, $reorderrelative = true)
@@ -234,8 +203,8 @@ class qa_html_theme_base
 
 	/**
 	 * Output the widgets (as provided in $this->content['widgets']) for $region and $place.
-	 * @param string $region
-	 * @param string $place
+	 * @param $region
+	 * @param $place
 	 */
 	public function widgets($region, $place)
 	{
@@ -759,7 +728,7 @@ class qa_html_theme_base
 		$this->widgets('main', 'low');
 
 		$this->page_links();
-		$this->suggest_next();
+		//$this->suggest_next();
 
 		$this->widgets('main', 'bottom');
 
@@ -775,7 +744,7 @@ class qa_html_theme_base
 				$this->output('<form ' . $favorite['form_tags'] . '>');
 
 			$this->output('<div class="qa-main-heading">');
-			$this->favorite();
+			//$this->favorite();
 			$this->output('<h1>');
 			$this->title();
 			$this->output('</h1>');
@@ -1048,8 +1017,8 @@ class qa_html_theme_base
 	/**
 	 * Reorder the fields of $form according to the $keys array which contains the field keys in their new order. Call
 	 * before any fields are output. See the docs for qa_array_reorder() in util/sort.php for the other parameters.
-	 * @param array
-	 * @param array $keys
+	 * @param $form
+	 * @param $keys
 	 * @param mixed $beforekey
 	 * @param bool $reorderrelative
 	 */
@@ -1212,10 +1181,6 @@ class qa_html_theme_base
 				$this->form_image($field, $style);
 				break;
 
-			case 'email':
-				$this->form_email($field, $style);
-				break;
-
 			case 'custom':
 				$this->output_raw(@$field['html']);
 				break;
@@ -1236,8 +1201,8 @@ class qa_html_theme_base
 	/**
 	 * Reorder the buttons of $form according to the $keys array which contains the button keys in their new order. Call
 	 * before any buttons are output. See the docs for qa_array_reorder() in util/sort.php for the other parameters.
-	 * @param array $form
-	 * @param array $keys
+	 * @param $form
+	 * @param $keys
 	 * @param mixed $beforekey
 	 * @param bool $reorderrelative
 	 */
@@ -1410,11 +1375,6 @@ class qa_html_theme_base
 		$this->output('<div class="qa-form-' . $style . '-image">' . @$field['html'] . '</div>');
 	}
 
-	public function form_email($field, $style)
-	{
-		$this->output('<input ' . @$field['tags'] . ' type="email" value="' . @$field['value'] . '" class="qa-form-' . $style . '-email"/>');
-	}
-
 	public function form_text_single_row($field, $style)
 	{
 		$this->output('<input ' . @$field['tags'] . ' type="text" value="' . @$field['value'] . '" class="qa-form-' . $style . '-text"/>');
@@ -1508,7 +1468,7 @@ class qa_html_theme_base
 	 * removed in a future version. Themes can switch to the new layout by setting the member
 	 * variable $ranking_block_layout to false.
 	 * @param $ranking
-	 * @param string $class
+	 * @param $class
 	 */
 	public function ranking_table($ranking, $class)
 	{
@@ -1538,7 +1498,7 @@ class qa_html_theme_base
 	/**
 	 * @deprecated See ranking_table above.
 	 * @param $item
-	 * @param string $class
+	 * @param $class
 	 * @param $spacer
 	 */
 	public function ranking_table_item($item, $class, $spacer)
@@ -1566,7 +1526,7 @@ class qa_html_theme_base
 
 	/**
 	 * @deprecated See ranking_table above.
-	 * @param string $class
+	 * @param $class
 	 */
 	public function ranking_spacer($class)
 	{
@@ -1710,7 +1670,7 @@ class qa_html_theme_base
 	{
 		$this->output('<div class="qa-q-list-item' . rtrim(' ' . @$q_item['classes']) . '" ' . @$q_item['tags'] . '>');
 
-		$this->q_item_stats($q_item);
+		//$this->q_item_stats($q_item);
 		$this->q_item_main($q_item);
 		$this->q_item_clear();
 
@@ -1928,8 +1888,8 @@ class qa_html_theme_base
 
 	/**
 	 * @deprecated Deprecated from 1.7; please use avatar() instead.
-	 * @param array $post
-	 * @param string $class
+	 * @param $post
+	 * @param $class
 	 * @param string $prefix
 	 */
 	public function post_avatar($post, $class, $prefix = null)

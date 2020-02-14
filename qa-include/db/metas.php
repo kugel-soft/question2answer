@@ -27,9 +27,9 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 
 /**
  * Set the metadata for user $userid with $key to $value. Keys beginning qa_ are reserved for the Q2A core.
- * @param mixed $userid
- * @param string $key
- * @param string $value
+ * @param $userid
+ * @param $key
+ * @param $value
  */
 function qa_db_usermeta_set($userid, $key, $value)
 {
@@ -39,8 +39,8 @@ function qa_db_usermeta_set($userid, $key, $value)
 
 /**
  * Clear the metadata for user $userid with $key ($key can also be an array of keys)
- * @param mixed $userid
- * @param string $key
+ * @param $userid
+ * @param $key
  */
 function qa_db_usermeta_clear($userid, $key)
 {
@@ -51,8 +51,8 @@ function qa_db_usermeta_clear($userid, $key)
 /**
  * Return the metadata value for user $userid with $key ($key can also be an array of keys in which case this
  * returns an array of metadata key => value).
- * @param mixed $userid
- * @param string $key
+ * @param $userid
+ * @param $key
  * @return array|mixed|null
  */
 function qa_db_usermeta_get($userid, $key)
@@ -63,9 +63,9 @@ function qa_db_usermeta_get($userid, $key)
 
 /**
  * Set the metadata for post $postid with $key to $value. Keys beginning qa_ are reserved for the Q2A core.
- * @param int $postid
- * @param string $key
- * @param string $value
+ * @param $postid
+ * @param $key
+ * @param $value
  */
 function qa_db_postmeta_set($postid, $key, $value)
 {
@@ -75,8 +75,8 @@ function qa_db_postmeta_set($postid, $key, $value)
 
 /**
  * Clear the metadata for post $postid with $key ($key can also be an array of keys)
- * @param int $postid
- * @param string $key
+ * @param $postid
+ * @param $key
  */
 function qa_db_postmeta_clear($postid, $key)
 {
@@ -87,8 +87,8 @@ function qa_db_postmeta_clear($postid, $key)
 /**
  * Return the metadata value for post $postid with $key ($key can also be an array of keys in which case this
  * returns an array of metadata key => value).
- * @param int $postid
- * @param string $key
+ * @param $postid
+ * @param $key
  * @return array|mixed|null
  */
 function qa_db_postmeta_get($postid, $key)
@@ -99,9 +99,9 @@ function qa_db_postmeta_get($postid, $key)
 
 /**
  * Set the metadata for category $categoryid with $key to $value. Keys beginning qa_ are reserved for the Q2A core.
- * @param int $categoryid
- * @param string $key
- * @param string $value
+ * @param $categoryid
+ * @param $key
+ * @param $value
  */
 function qa_db_categorymeta_set($categoryid, $key, $value)
 {
@@ -111,8 +111,8 @@ function qa_db_categorymeta_set($categoryid, $key, $value)
 
 /**
  * Clear the metadata for category $categoryid with $key ($key can also be an array of keys)
- * @param int $categoryid
- * @param string $key
+ * @param $categoryid
+ * @param $key
  */
 function qa_db_categorymeta_clear($categoryid, $key)
 {
@@ -123,8 +123,8 @@ function qa_db_categorymeta_clear($categoryid, $key)
 /**
  * Return the metadata value for category $categoryid with $key ($key can also be an array of keys in which
  * case this returns an array of metadata key => value).
- * @param int $categoryid
- * @param string $key
+ * @param $categoryid
+ * @param $key
  * @return array|mixed|null
  */
 function qa_db_categorymeta_get($categoryid, $key)
@@ -135,9 +135,9 @@ function qa_db_categorymeta_get($categoryid, $key)
 
 /**
  * Set the metadata for tag $tag with $key to $value. Keys beginning qa_ are reserved for the Q2A core.
- * @param string $tag
- * @param string $key
- * @param string $value
+ * @param $tag
+ * @param $key
+ * @param $value
  */
 function qa_db_tagmeta_set($tag, $key, $value)
 {
@@ -147,8 +147,8 @@ function qa_db_tagmeta_set($tag, $key, $value)
 
 /**
  * Clear the metadata for tag $tag with $key ($key can also be an array of keys)
- * @param string $tag
- * @param string $key
+ * @param $tag
+ * @param $key
  */
 function qa_db_tagmeta_clear($tag, $key)
 {
@@ -159,9 +159,9 @@ function qa_db_tagmeta_clear($tag, $key)
 /**
  * Return the metadata value for tag $tag with $key ($key can also be an array of keys in which case this
  * returns an array of metadata key => value).
- * @param string $tag
- * @param string $key
- * @return mixed
+ * @param $tag
+ * @param $key
+ * @return array|mixed|null
  */
 function qa_db_tagmeta_get($tag, $key)
 {
@@ -171,11 +171,11 @@ function qa_db_tagmeta_get($tag, $key)
 
 /**
  * Internal general function to set metadata
- * @param string $metatable
- * @param string $idcolumn
- * @param string $idvalue
- * @param string $title
- * @param string $content
+ * @param $metatable
+ * @param $idcolumn
+ * @param $idvalue
+ * @param $title
+ * @param $content
  */
 function qa_db_meta_set($metatable, $idcolumn, $idvalue, $title, $content)
 {
@@ -189,10 +189,10 @@ function qa_db_meta_set($metatable, $idcolumn, $idvalue, $title, $content)
 
 /**
  * Internal general function to clear metadata
- * @param string $metatable
- * @param string $idcolumn
- * @param string $idvalue
- * @param string|array $title
+ * @param $metatable
+ * @param $idcolumn
+ * @param $idvalue
+ * @param $title
  */
 function qa_db_meta_clear($metatable, $idcolumn, $idvalue, $title)
 {
@@ -214,11 +214,11 @@ function qa_db_meta_clear($metatable, $idcolumn, $idvalue, $title)
 
 /**
  * Internal general function to return metadata
- * @param string $metatable
- * @param string $idcolumn
- * @param string $idvalue
- * @param string|array $title
- * @return mixed
+ * @param $metatable
+ * @param $idcolumn
+ * @param $idvalue
+ * @param $title
+ * @return array|mixed|null
  */
 function qa_db_meta_get($metatable, $idcolumn, $idvalue, $title)
 {

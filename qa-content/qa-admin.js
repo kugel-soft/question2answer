@@ -56,21 +56,28 @@ function qa_recalc_update(elem, state, noteid)
 {
 	if (state) {
 		var recalcCode = elem.form.elements.code_recalc ? elem.form.elements.code_recalc.value : elem.form.elements.code.value;
-
 		qa_ajax_post(
 			'recalc',
 			{state: state, code: recalcCode},
-			function (response) {
-				if (response.message) {
-					document.getElementById(noteid).innerHTML = response.message;
-				}
+			function(lines) {
+				if (lines[0] == '1') {
+					if (lines[2])
+						document.getElementById(noteid).innerHTML = lines[2];
 
-				if (elem.qa_recalc_stopped) {
+					if (elem.qa_recalc_stopped)
+						qa_recalc_cleanup(elem);
+					else
+						qa_recalc_update(elem, lines[1], noteid);
+
+				} else if (lines[0] == '0') {
+					document.getElementById(noteid).innerHTML = lines[1];
 					qa_recalc_cleanup(elem);
+
 				} else {
-					qa_recalc_update(elem, response.state, noteid);
+					qa_ajax_error();
+					qa_recalc_cleanup(elem);
 				}
-			}, 1
+			}
 		);
 	} else {
 		qa_recalc_cleanup(elem);
@@ -86,41 +93,23 @@ function qa_recalc_cleanup(elem)
 
 function qa_mailing_start(noteid, pauseid)
 {
-	qa_ajax_post(
-		'mailing',
-		{},
-		function (response) {
-			document.getElementById(noteid).innerHTML = response.message;
-			if (response.continue) {
-				window.setTimeout(function () {
+	qa_ajax_post('mailing', {},
+		function(lines) {
+			if (lines[0] == '1') {
+				document.getElementById(noteid).innerHTML = lines[1];
+				window.setTimeout(function() {
 					qa_mailing_start(noteid, pauseid);
 				}, 1); // don't recurse
-			} else {
+
+			} else if (lines[0] == '0') {
+				document.getElementById(noteid).innerHTML = lines[1];
 				document.getElementById(pauseid).style.display = 'none';
+
+			} else {
+				qa_ajax_error();
 			}
-		}, 1
-	);
-}
-
-function qa_update_dom(response)
-{
-	if (!response.hasOwnProperty('domUpdates')) {
-		return;
-	}
-
-	for (var i = 0; i < response.domUpdates.length; i++) {
-		var domUpdate = response.domUpdates[i];
-		switch (domUpdate.action) {
-			case 'conceal':
-				qa_conceal(document.querySelector(domUpdate.selector));
-				break;
-			case 'reveal':
-				qa_reveal(document.querySelector(domUpdate.selector));
-				break;
-			default: // replace
-				$(domUpdate.selector).html(domUpdate.html);
 		}
-	}
+	);
 }
 
 function qa_admin_click(target)
@@ -131,15 +120,15 @@ function qa_admin_click(target)
 	params.code = target.form.elements.code.value;
 
 	qa_ajax_post('click_admin', params,
-		function (response) {
-			qa_update_dom(response);
-
-			if (response.result === 'error' && response.error.severity === 'fatal') {
-				alert(response.error.message);
-			}
-
-			qa_hide_waiting(target);
-		}, 1
+		function(lines) {
+			if (lines[0] == '1')
+				qa_conceal(document.getElementById('p' + p[1]), 'admin');
+			else if (lines[0] == '0') {
+				alert(lines[1]);
+				qa_hide_waiting(target);
+			} else
+				qa_ajax_error();
+		}
 	);
 
 	qa_show_waiting_after(target, false);
@@ -149,18 +138,13 @@ function qa_admin_click(target)
 
 function qa_version_check(uri, version, elem, isCore)
 {
-	qa_ajax_post(
-		'version',
-		{uri: uri, version: version, isCore: isCore},
-		function (response) {
-			if (response.result === 'error') {
-				alert(response.error.message);
+	var params = {uri: uri, version: version, isCore: isCore};
 
-				return;
-			}
-
-			document.getElementById(elem).innerHTML = response.html;
-		}, 1
+	qa_ajax_post('version', params,
+		function(lines) {
+			if (lines[0] == '1')
+				document.getElementById(elem).innerHTML = lines[1];
+		}
 	);
 }
 

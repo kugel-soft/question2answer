@@ -27,8 +27,8 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 
 /**
  * Create a new random cookie for $ipaddress and insert into database, returning it
- * @param string $ipaddress
- * @return string|null
+ * @param $ipaddress
+ * @return null|string
  */
 function qa_db_cookie_create($ipaddress)
 {
@@ -53,8 +53,8 @@ function qa_db_cookie_create($ipaddress)
 
 /**
  * Note in database that a write operation has been done by user identified by $cookieid and from $ipaddress
- * @param string $cookieid
- * @param string $ipaddress
+ * @param $cookieid
+ * @param $ipaddress
  */
 function qa_db_cookie_written($cookieid, $ipaddress)
 {
@@ -67,7 +67,7 @@ function qa_db_cookie_written($cookieid, $ipaddress)
 
 /**
  * Return whether $cookieid exists in database
- * @param string $cookieid
+ * @param $cookieid
  * @return bool
  */
 function qa_db_cookie_exists($cookieid)

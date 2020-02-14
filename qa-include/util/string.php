@@ -421,7 +421,7 @@ function qa_string_initialize()
  * Return the UTF-8 input string converted into an array of words, changed $tolowercase (or not).
  * Set $delimiters to true to keep the delimiters after each word and tweak what we used for word
  * splitting with $splitideographs and $splithyphens.
- * @param string $string
+ * @param $string
  * @param bool $tolowercase
  * @param bool $delimiters
  * @param bool $splitideographs
@@ -521,8 +521,8 @@ function qa_slugify($string, $asciiOnly = true, $maxLength = null)
 
 /**
  * Convert an array of tags into a string for storage in the database
- * @param array $tags
- * @return string
+ * @param $tags
+ * @return mixed|string
  */
 function qa_tags_to_tagstring($tags)
 {
@@ -534,7 +534,7 @@ function qa_tags_to_tagstring($tags)
 
 /**
  * Convert a tag string as stored in the database into an array of tags
- * @param string $tagstring
+ * @param $tagstring
  * @return array|mixed
  */
 function qa_tagstring_to_tags($tagstring)
@@ -548,6 +548,7 @@ function qa_tagstring_to_tags($tagstring)
 /**
  * Converts a string to a single line and removes words from it until it fits in the given length. Words are removed
  * from a position around two thirds of the string and are replaced by the given ellipsis string
+ *
  * @param string $string Text that will be turned into a single line and cut, if necessary
  * @param int $length Maximum allowed length of the returned string. This value can be overriden by the length of the
  * ellipsis if it is higher than the maximum allowed length
@@ -595,7 +596,7 @@ function qa_shorten_string_line($string, $length, $ellipsis = ' ... ')
 
 /**
  * Removes 4-byte Unicode characters (e.g. emoji) from a string due to missing support in MySQL < 5.5.3.
- * @param string $string
+ * @param  string $string
  * @return string
  */
 function qa_remove_utf8mb4($string)
@@ -610,8 +611,8 @@ function qa_remove_utf8mb4($string)
 
 /**
  * Return an array of the words within $wordstring, each of which can contain asterisks
- * @param string $wordstring
- * @return array
+ * @param $wordstring
+ * @return array|mixed
  */
 function qa_block_words_explode($wordstring)
 {
@@ -623,7 +624,7 @@ function qa_block_words_explode($wordstring)
 
 /**
  * Return a regular expression fragment corresponding to the block words $wordstring
- * @param string $wordsstring
+ * @param $wordsstring
  * @return mixed|string
  */
 function qa_block_words_to_preg($wordsstring)
@@ -651,8 +652,8 @@ function qa_block_words_to_preg($wordsstring)
 
 /**
  * Return an array of matches of the regular expression fragment $wordspreg in $string, [offset] => [length]
- * @param string $string
- * @param string $wordspreg
+ * @param $string
+ * @param $wordspreg
  * @return array
  */
 function qa_block_words_match_all($string, $wordspreg)
@@ -692,7 +693,7 @@ function qa_block_words_match_all($string, $wordspreg)
  * @param string $string
  * @param string $wordspreg
  * @param string $character
- * @return string
+ * @return mixed
  */
 function qa_block_words_replace($string, $wordspreg, $character = '*')
 {
@@ -712,7 +713,7 @@ function qa_block_words_replace($string, $wordspreg, $character = '*')
 
 /**
  * Return a random alphanumeric string (base 36) of $length
- * @param int $length
+ * @param $length
  * @return string
  */
 function qa_random_alphanum($length)
@@ -728,8 +729,8 @@ function qa_random_alphanum($length)
 
 /**
  * Return true or false to indicate whether $email is a valid email (this is pretty flexible compared to most real emails out there)
- * @param string $email
- * @return bool
+ * @param $email
+ * @return bool|mixed
  */
 function qa_email_validate($email)
 {
@@ -741,8 +742,8 @@ function qa_email_validate($email)
 
 /**
  * Return the number of characters in $string, preferably using PHP's multibyte string functions
- * @param string $string
- * @return int
+ * @param $string
+ * @return int|mixed
  */
 function qa_strlen($string)
 {
@@ -754,8 +755,8 @@ function qa_strlen($string)
 
 /**
  * Return a lower case version of $string, preferably using PHP's multibyte string functions
- * @param string $string
- * @return string
+ * @param $string
+ * @return mixed|string
  */
 function qa_strtolower($string)
 {
@@ -767,10 +768,10 @@ function qa_strtolower($string)
 
 /**
  * Return $length characters from $string, starting from $start, preferably using PHP's multibyte string functions
- * @param string $string
- * @param int $start
+ * @param $string
+ * @param $start
  * @param int $length
- * @return string
+ * @return mixed|string
  */
 function qa_substr($string, $start, $length = 2147483647)
 {
@@ -782,7 +783,6 @@ function qa_substr($string, $start, $length = 2147483647)
 
 /**
  * Return whether this version of PHP has been compiled with multibyte string support
- * @return bool
  */
 function qa_has_multibyte()
 {
@@ -792,8 +792,8 @@ function qa_has_multibyte()
 
 /**
  * Return true if at least one of the values in array $matches is a substring of $string. Otherwise, return false.
- * @param string $string
- * @param array $matches
+ * @param $string
+ * @param $matches
  * @return bool
  */
 function qa_string_matches_one($string, $matches)

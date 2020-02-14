@@ -39,8 +39,8 @@ function qa_has_gd_image()
  * Check if the image in $imagefile will be too big for PHP/GD to process given memory usage and limits
  * Pass the width and height limit beyond which the image will require scaling in $size (if any)
  * Returns false if the image will fit fine, otherwise a safe estimate of the factor the image should be sized by
- * @param string $imagefile
- * @param int|null $size
+ * @param $imagefile
+ * @param int $size
  * @return bool|float
  */
 function qa_image_file_too_big($imagefile, $size = null)
@@ -82,12 +82,12 @@ function qa_image_file_too_big($imagefile, $size = null)
  * Given $imagedata containing JPEG/GIF/PNG data, constrain it proportionally to fit in $maxwidth x $maxheight.
  * Return the new image data (will always be a JPEG), and set the $width and $height variables.
  * If $maxheight is omitted or set to null, assume it to be the same as $maxwidth.
- * @param string $imagedata
+ * @param $imagedata
  * @param int $width
  * @param int $height
  * @param int $maxwidth
- * @param int|null $maxheight
- * @return string|null
+ * @param int $maxheight
+ * @return null|string
  */
 function qa_image_constrain_data($imagedata, &$width, &$height, $maxwidth, $maxheight = null)
 {
@@ -119,7 +119,7 @@ function qa_image_constrain_data($imagedata, &$width, &$height, $maxwidth, $maxh
  * @param int $width
  * @param int $height
  * @param int $maxwidth
- * @param int|null $maxheight
+ * @param int $maxheight
  * @return bool
  */
 function qa_image_constrain(&$width, &$height, $maxwidth, $maxheight = null)
@@ -141,9 +141,9 @@ function qa_image_constrain(&$width, &$height, $maxwidth, $maxheight = null)
 
 /**
  * Resize the GD $image to $width and $height, setting it to null if the resize failed
- * @param resource $image
- * @param int $width
- * @param int $height
+ * @param $image
+ * @param $width
+ * @param $height
  */
 function qa_gd_image_resize(&$image, $width, $height)
 {
@@ -181,7 +181,6 @@ function qa_gd_image_jpeg($image, $output = false)
 
 /**
  * Return an array of strings listing the image formats that are supported
- * @return array
  */
 function qa_gd_image_formats()
 {

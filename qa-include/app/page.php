@@ -178,40 +178,21 @@ function qa_get_request_content()
 	$firstlower = strtolower($requestparts[0]);
 	$routing = qa_page_routing();
 
-	qa_controller_routing();
-	$qa_content = [];
+	if (isset($routing[$requestlower])) {
+		qa_set_template($firstlower);
+		$qa_content = require QA_INCLUDE_DIR . $routing[$requestlower];
 
-	try {
-		// use new Controller system
-		$route = qa_service('router')->match($requestlower);
-		if ($route !== null) {
-			qa_set_template($route->getOption('template'));
-			$controllerClass = $route->getController();
-			$ctrl = new $controllerClass();
+	} elseif (isset($routing[$firstlower . '/'])) {
+		qa_set_template($firstlower);
+		$qa_content = require QA_INCLUDE_DIR . $routing[$firstlower . '/'];
 
-			$qa_content = $ctrl->executeAction($route->getAction(), $route->getParameters());
-		}
-	} catch (\Exception $e) {
-		$qa_content = (new \Q2A\Exceptions\ExceptionHandler)->handle($e);
-	}
+	} elseif (is_numeric($requestparts[0])) {
+		qa_set_template('question');
+		$qa_content = require QA_INCLUDE_DIR . 'pages/question.php';
 
-	if (empty($qa_content)) {
-		if (isset($routing[$requestlower])) {
-			qa_set_template($firstlower);
-			$qa_content = require QA_INCLUDE_DIR . $routing[$requestlower];
-
-		} elseif (isset($routing[$firstlower . '/'])) {
-			qa_set_template($firstlower);
-			$qa_content = require QA_INCLUDE_DIR . $routing[$firstlower . '/'];
-
-		} elseif (is_numeric($requestparts[0])) {
-			qa_set_template('question');
-			$qa_content = require QA_INCLUDE_DIR . 'pages/question.php';
-
-		} else {
-			qa_set_template(strlen($firstlower) ? $firstlower : 'qa'); // will be changed later
-			$qa_content = require QA_INCLUDE_DIR . 'pages/default.php'; // handles many other pages, including custom pages and page modules
-		}
+	} else {
+		qa_set_template(strlen($firstlower) ? $firstlower : 'qa'); // will be changed later
+		$qa_content = require QA_INCLUDE_DIR . 'pages/default.php'; // handles many other pages, including custom pages and page modules
 	}
 
 	if ($firstlower == 'admin') {
@@ -227,8 +208,8 @@ function qa_get_request_content()
 
 
 /**
- * Output the $qa_content via the theme class after doing some pre-processing, mainly relating to Javascript
- * @param array $qa_content
+ *    Output the $qa_content via the theme class after doing some pre-processing, mainly relating to Javascript
+ * @param $qa_content
  * @return mixed
  */
 function qa_output_content($qa_content)
@@ -364,7 +345,7 @@ function qa_output_content($qa_content)
 		$qa_content['script'] = array();
 	}
 
-	$qa_content['script'] = array_merge($script, $qa_content['script']);
+	$qa_content['script'] = array_merge($qa_content['script'], $script);
 
 	// Load the appropriate theme class and output the page
 
@@ -382,7 +363,7 @@ function qa_output_content($qa_content)
 
 /**
  * Update any statistics required by the fields in $qa_content, and return true if something was done
- * @param array $qa_content
+ * @param $qa_content
  * @return bool
  */
 function qa_do_content_stats($qa_content)
@@ -425,7 +406,9 @@ function qa_page_routing()
 		'admin/moderate' => 'pages/admin/admin-moderate.php',
 		'admin/pages' => 'pages/admin/admin-pages.php',
 		'admin/plugins' => 'pages/admin/admin-plugins.php',
+		'admin/points' => 'pages/admin/admin-points.php',
 		'admin/recalc' => 'pages/admin/admin-recalc.php',
+		'admin/stats' => 'pages/admin/admin-stats.php',
 		'admin/userfields' => 'pages/admin/admin-userfields.php',
 		'admin/usertitles' => 'pages/admin/admin-usertitles.php',
 		'answers/' => 'pages/answers.php',
@@ -440,6 +423,7 @@ function qa_page_routing()
 		'feedback' => 'pages/feedback.php',
 		'forgot' => 'pages/forgot.php',
 		'hot/' => 'pages/hot.php',
+		'ip/' => 'pages/ip.php',
 		'login' => 'pages/login.php',
 		'logout' => 'pages/logout.php',
 		'messages/' => 'pages/messages.php',
@@ -453,41 +437,18 @@ function qa_page_routing()
 		'unanswered/' => 'pages/unanswered.php',
 		'unsubscribe' => 'pages/unsubscribe.php',
 		'updates' => 'pages/updates.php',
+		'user/' => 'pages/user.php',
+		'users' => 'pages/users.php',
+		'users/blocked' => 'pages/users-blocked.php',
+		'users/new' => 'pages/users-newest.php',
+		'users/special' => 'pages/users-special.php',
 	);
 }
 
 
 /**
- * Set up routing.
- */
-function qa_controller_routing()
-{
-	$router = qa_service('router');
-	$router->addRoute('GET', 'user/{str}', '\Q2A\Controllers\User\UserProfile', 'profile', ['template' => 'user']);
-	$router->addRoute('POST', 'user/{str}', '\Q2A\Controllers\User\UserProfile', 'profile', ['template' => 'user']);
-	$router->addRoute('GET', 'user', '\Q2A\Controllers\User\UserProfile', 'index');
-	$router->addRoute('GET', 'user/{str}/wall', '\Q2A\Controllers\User\UserMessages', 'wall', ['template' => 'user-wall']);
-	$router->addRoute('GET', 'user/{str}/activity', '\Q2A\Controllers\User\UserPosts', 'activity', ['template' => 'user-activity']);
-	$router->addRoute('GET', 'user/{str}/questions', '\Q2A\Controllers\User\UserPosts', 'questions', ['template' => 'user-questions']);
-	$router->addRoute('GET', 'user/{str}/answers', '\Q2A\Controllers\User\UserPosts', 'answers', ['template' => 'user-answers']);
-
-	$router->addRoute('GET', 'users', '\Q2A\Controllers\User\UsersList', 'top', ['template' => 'users']);
-	$router->addRoute('GET', 'users/blocked', '\Q2A\Controllers\User\UsersList', 'blocked', ['template' => 'users']);
-	$router->addRoute('GET', 'users/new', '\Q2A\Controllers\User\UsersList', 'newest', ['template' => 'users']);
-	$router->addRoute('GET', 'users/special', '\Q2A\Controllers\User\UsersList', 'special', ['template' => 'users']);
-
-	$router->addRoute('GET', 'ip/{str}', '\Q2A\Controllers\User\Ip', 'address', ['template' => 'ip']);
-	$router->addRoute('POST', 'ip/{str}', '\Q2A\Controllers\User\Ip', 'address', ['template' => 'ip']);
-
-	$router->addRoute('GET', 'admin/stats', '\Q2A\Controllers\Admin\Stats', 'index', ['template' => 'admin']);
-	$router->addRoute('GET', 'admin/points', '\Q2A\Controllers\Admin\Points', 'index', ['template' => 'admin']);
-	$router->addRoute('POST', 'admin/points', '\Q2A\Controllers\Admin\Points', 'index', ['template' => 'admin']);
-}
-
-
-/**
  * Sets the template which should be passed to the theme class, telling it which type of page it's displaying
- * @param string $template
+ * @param $template
  */
 function qa_set_template($template)
 {

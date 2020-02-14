@@ -31,7 +31,6 @@ require_once QA_INCLUDE_DIR . 'db/post-create.php';
 
 /**
  * Return the number of custom pages currently in the database
- * @return string
  */
 function qa_db_count_pages()
 {
@@ -43,8 +42,8 @@ function qa_db_count_pages()
 
 /**
  * Return the information to reindex up to $count pages starting from $startpageid in the database
- * @param int $startpageid
- * @param int $count
+ * @param $startpageid
+ * @param $count
  * @return array
  */
 function qa_db_pages_get_for_reindexing($startpageid, $count)
@@ -60,8 +59,8 @@ function qa_db_pages_get_for_reindexing($startpageid, $count)
 
 /**
  * Return the information required to reindex up to $count posts starting from $startpostid in the database
- * @param int $startpostid
- * @param int $count
+ * @param $startpostid
+ * @param $count
  * @return array
  */
 function qa_db_posts_get_for_reindexing($startpostid, $count)
@@ -75,8 +74,8 @@ function qa_db_posts_get_for_reindexing($startpostid, $count)
 
 /**
  * Prepare posts $firstpostid to $lastpostid for reindexing in the database by removing their prior index entries
- * @param int $firstpostid
- * @param int $lastpostid
+ * @param $firstpostid
+ * @param $lastpostid
  */
 function qa_db_prepare_for_reindexing($firstpostid, $lastpostid)
 {
@@ -104,7 +103,7 @@ function qa_db_prepare_for_reindexing($firstpostid, $lastpostid)
 
 /**
  * Remove any rows in the database word indexes with postid from $firstpostid upwards
- * @param int $firstpostid
+ * @param $firstpostid
  */
 function qa_db_truncate_indexes($firstpostid)
 {
@@ -132,7 +131,6 @@ function qa_db_truncate_indexes($firstpostid)
 
 /**
  * Return the number of words currently referenced in the database
- * @return string
  */
 function qa_db_count_words()
 {
@@ -144,8 +142,8 @@ function qa_db_count_words()
 
 /**
  * Return the ids of up to $count words in the database starting from $startwordid
- * @param int $startwordid
- * @param int $count
+ * @param $startwordid
+ * @param $count
  * @return array
  */
 function qa_db_words_prepare_for_recounting($startwordid, $count)
@@ -159,8 +157,8 @@ function qa_db_words_prepare_for_recounting($startwordid, $count)
 
 /**
  * Recalculate the cached counts for words $firstwordid to $lastwordid in the database
- * @param int $firstwordid
- * @param int $lastwordid
+ * @param $firstwordid
+ * @param $lastwordid
  */
 function qa_db_words_recount($firstwordid, $lastwordid)
 {
@@ -195,8 +193,8 @@ function qa_db_words_recount($firstwordid, $lastwordid)
 
 /**
  * Return the ids of up to $count posts in the database starting from $startpostid
- * @param int $startpostid
- * @param int $count
+ * @param $startpostid
+ * @param $count
  * @return array
  */
 function qa_db_posts_get_for_recounting($startpostid, $count)
@@ -210,8 +208,8 @@ function qa_db_posts_get_for_recounting($startpostid, $count)
 
 /**
  * Recalculate the cached vote counts for posts $firstpostid to $lastpostid in the database
- * @param int $firstpostid
- * @param int $lastpostid
+ * @param $firstpostid
+ * @param $lastpostid
  */
 function qa_db_posts_votes_recount($firstpostid, $lastpostid)
 {
@@ -225,10 +223,9 @@ function qa_db_posts_votes_recount($firstpostid, $lastpostid)
 
 
 /**
- * Recalculate the cached answer counts for posts $firstpostid to $lastpostid in the database, along with the highest
- * netvotes of any of their answers
- * @param int $firstpostid
- * @param int $lastpostid
+ * Recalculate the cached answer counts for posts $firstpostid to $lastpostid in the database, along with the highest netvotes of any of their answers
+ * @param $firstpostid
+ * @param $lastpostid
  */
 function qa_db_posts_answers_recount($firstpostid, $lastpostid)
 {
@@ -246,10 +243,10 @@ function qa_db_posts_answers_recount($firstpostid, $lastpostid)
 // For recalculating user points...
 
 /**
- * Return the ids of up to $count users in the database starting from $startuserid.
+ * Return the ids of up to $count users in the database starting from $startuserid
  * If using single sign-on integration, base this on user activity rather than the users table which we don't have
- * @param int $startuserid
- * @param int $count
+ * @param $startuserid
+ * @param $count
  * @return array
  */
 function qa_db_users_get_for_recalc_points($startuserid, $count)
@@ -270,8 +267,8 @@ function qa_db_users_get_for_recalc_points($startuserid, $count)
 
 /**
  * Recalculate all userpoints columns for users $firstuserid to $lastuserid in the database
- * @param mixed $firstuserid
- * @param mixed $lastuserid
+ * @param $firstuserid
+ * @param $lastuserid
  */
 function qa_db_users_recalc_points($firstuserid, $lastuserid)
 {
@@ -327,7 +324,7 @@ function qa_db_users_recalc_points($firstuserid, $lastuserid)
 
 /**
  * Remove any rows in the userpoints table where userid is greater than $lastuserid
- * @param mixed $lastuserid
+ * @param $lastuserid
  */
 function qa_db_truncate_userpoints($lastuserid)
 {
@@ -342,8 +339,8 @@ function qa_db_truncate_userpoints($lastuserid)
 
 /**
  * Return the ids of up to $count questions in the database starting from $startpostid
- * @param int $startpostid
- * @param int $count
+ * @param $startpostid
+ * @param $count
  * @return array
  */
 function qa_db_qs_get_for_event_refilling($startpostid, $count)
@@ -359,8 +356,8 @@ function qa_db_qs_get_for_event_refilling($startpostid, $count)
 
 /**
  * Return the ids of up to $count posts (including queued/hidden) in the database starting from $startpostid
- * @param int $startpostid
- * @param int $count
+ * @param $startpostid
+ * @param $count
  * @return array
  */
 function qa_db_posts_get_for_recategorizing($startpostid, $count)
@@ -375,8 +372,8 @@ function qa_db_posts_get_for_recategorizing($startpostid, $count)
 /**
  * Recalculate the (exact) categoryid for the posts (including queued/hidden) between $firstpostid and $lastpostid
  * in the database, where the category of comments and answers is set by the category of the antecedent question
- * @param int $firstpostid
- * @param int $lastpostid
+ * @param $firstpostid
+ * @param $lastpostid
  */
 function qa_db_posts_recalc_categoryid($firstpostid, $lastpostid)
 {
@@ -389,8 +386,8 @@ function qa_db_posts_recalc_categoryid($firstpostid, $lastpostid)
 
 /**
  * Return the ids of up to $count categories in the database starting from $startcategoryid
- * @param int $startcategoryid
- * @param int $count
+ * @param $startcategoryid
+ * @param $count
  * @return array
  */
 function qa_db_categories_get_for_recalcs($startcategoryid, $count)
@@ -406,9 +403,9 @@ function qa_db_categories_get_for_recalcs($startcategoryid, $count)
 
 /**
  * Return the ids of up to $limit posts of $type that can be deleted from the database (i.e. have no dependents)
- * @param string $type
+ * @param $type
  * @param int $startpostid
- * @param int|null $limit
+ * @param $limit
  * @return array
  */
 function qa_db_posts_get_for_deleting($type, $startpostid = 0, $limit = null)
@@ -426,7 +423,6 @@ function qa_db_posts_get_for_deleting($type, $startpostid = 0, $limit = null)
 
 /**
  * Return the number of blobs whose content is stored in the database, rather than on disk
- * @return string
  */
 function qa_db_count_blobs_in_db()
 {
@@ -436,7 +432,7 @@ function qa_db_count_blobs_in_db()
 
 /**
  * Return the id, content and format of the first blob whose content is stored in the database starting from $startblobid
- * @param int $startblobid
+ * @param $startblobid
  * @return array|null
  */
 function qa_db_get_next_blob_in_db($startblobid)
@@ -450,7 +446,6 @@ function qa_db_get_next_blob_in_db($startblobid)
 
 /**
  * Return the number of blobs whose content is stored on disk, rather than in the database
- * @return string
  */
 function qa_db_count_blobs_on_disk()
 {
@@ -460,7 +455,7 @@ function qa_db_count_blobs_on_disk()
 
 /**
  * Return the id and format of the first blob whose content is stored on disk starting from $startblobid
- * @param int $startblobid
+ * @param $startblobid
  * @return array|null
  */
 function qa_db_get_next_blob_on_disk($startblobid)

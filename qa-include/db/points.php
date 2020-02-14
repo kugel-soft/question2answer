@@ -27,7 +27,6 @@ if (!defined('QA_VERSION')) { // don't allow this page to be requested directly 
 
 /**
  * Returns an array of option names required to perform calculations in userpoints table
- * @return mixed
  */
 function qa_db_points_option_names()
 {
@@ -50,7 +49,6 @@ function qa_db_points_option_names()
  * The element 'formula' contains the SQL fragment that calculates the columns value for one or more users,
  * where the ~ symbol within the fragment is substituted for a constraint on which users we are interested in.
  * The element 'multiple' specifies what to multiply each column by to create the final sum in the points column.
- * @return mixed
  */
 function qa_db_points_calculations()
 {
@@ -158,10 +156,10 @@ function qa_db_points_calculations()
 
 /**
  * Update the userpoints table in the database for $userid and $columns, plus the summary points column.
- * Set $columns to true for all, false for none, an array for several, or a single value for one.
+ * Set $columns to true for all, empty for none, an array for several, or a single value for one.
  * This dynamically builds some fairly crazy looking SQL, but it works, and saves repeat calculations.
- * @param mixed $userid
- * @param bool|string|array $columns
+ * @param $userid
+ * @param $columns
  * @return mixed
  */
 function qa_db_points_update_ifuser($userid, $columns)
@@ -208,9 +206,9 @@ function qa_db_points_update_ifuser($userid, $columns)
 			'ON DUPLICATE KEY UPDATE ' . $updates . 'points=' . $updatepoints . '+bonus';
 
 		// build like this so that a #, $ or ^ character in the $userid (if external integration) isn't substituted
-		$result = qa_db_query_raw(str_replace('~', "='" . qa_db_escape_string($userid) . "'", qa_db_apply_sub($query, array($userid))));
+		qa_db_query_raw(str_replace('~', "='" . qa_db_escape_string($userid) . "'", qa_db_apply_sub($query, array($userid))));
 
-		if ($result->affectedRows() > 0) {
+		if (qa_db_insert_on_duplicate_inserted()) {
 			qa_db_userpointscount_update();
 		}
 	}
@@ -219,8 +217,8 @@ function qa_db_points_update_ifuser($userid, $columns)
 
 /**
  * Set the number of explicit bonus points for $userid to $bonus
- * @param mixed $userid
- * @param int $bonus
+ * @param $userid
+ * @param $bonus
  */
 function qa_db_points_set_bonus($userid, $bonus)
 {

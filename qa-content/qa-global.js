@@ -152,31 +152,22 @@ function qa_favorite_click(elem)
 	return false;
 }
 
-function qa_ajax_post(operation, params, callback, apiVersion)
+function qa_ajax_post(operation, params, callback)
 {
-	if (typeof(apiVersion) === 'undefined') {
-		apiVersion = 0;
-	}
+	$.extend(params, {qa: 'ajax', qa_operation: operation, qa_root: qa_root, qa_request: qa_request});
 
-	$.extend(params, {qa: 'ajax', qa_operation: operation, qa_root: qa_root, qa_request: qa_request, apiVersion: apiVersion});
+	$.post(qa_root, params, function(response) {
+		var header = 'QA_AJAX_RESPONSE';
+		var headerpos = response.indexOf(header);
 
-	$.post(qa_root, params, function (response) {
-			if (apiVersion === 0) {
-				var header = 'QA_AJAX_RESPONSE';
-				var headerpos = response.indexOf(header);
+		if (headerpos >= 0)
+			callback(response.substr(headerpos + header.length).replace(/^\s+/, '').split("\n"));
+		else
+			callback([]);
 
-				if (headerpos >= 0)
-					callback(response.substr(headerpos + header.length).replace(/^\s+/, '').split("\n"));
-				else
-					callback([]);
-			} else {
-				callback(response);
-			}
-		},
-		apiVersion === 0 ? 'text' : 'json'
-	).fail(function (jqXHR) {
+	}, 'text').fail(function(jqXHR) {
 		if (jqXHR.readyState > 0)
-			qa_ajax_error();
+			callback([])
 	});
 }
 

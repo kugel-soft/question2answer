@@ -35,7 +35,7 @@ require_once QA_INCLUDE_DIR . 'app/options.php';
 
 /**
  * Database failure handler function for RSS feeds - outputs HTTP and text errors
- * @param string $type
+ * @param $type
  * @param int $errno
  * @param string $error
  * @param string $query
@@ -62,8 +62,8 @@ function qa_feed_not_found()
 /**
  * Common function to load appropriate set of questions for requested feed, check category exists, and set up page title
  * @param array $categoryslugs
- * @param string|null $allkey
- * @param string|null $catkey
+ * @param string $allkey
+ * @param string $catkey
  * @param string $title
  * @param array $questionselectspec1
  * @param array $questionselectspec2
@@ -102,7 +102,7 @@ function qa_feed_load_ifcategory($categoryslugs, $allkey, $catkey, &$title,
 
 // Connect to database and get the type of feed and category requested (in some cases these are overridden later)
 
-$qa_db->connect('qa_feed_db_fail_handler');
+qa_db_connect('qa_feed_db_fail_handler');
 qa_initialize_postdb_plugins();
 
 $requestlower = strtolower(qa_request());
@@ -422,7 +422,7 @@ $lines[] = '</rss>';
 
 // Disconnect here, once all output is ready to go
 
-$qa_db->disconnect();
+qa_db_disconnect();
 
 
 // Output the XML - and we're done!
