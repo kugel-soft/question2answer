@@ -1,5 +1,6 @@
 # Ignore Q2A config file and .htaccess in development
 /qa-config.php
+/kugel-config.php
 /.htaccess
 
 # Ignore cached files

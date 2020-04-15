@@ -11,13 +11,16 @@
         File: qa-plugin/slack/qa-plugin.php
         Description: Posts information to Slack
  */
+
+include __DIR__ . '/../../kugel-config.php';
+
 class qa_slack
 {
 
     // change these three lines
     private $siteUrl = 'http://192.168.4.19/';
-    private $slackUrl = 'https://hooks.slack.com/services/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';
-    private $linkMessage = 'Ver no kperguntas!';
+    private $slackUrl = URL_HOOK_SLACK;
+    private $linkMessage = 'Ver no KPerguntas!';
 
     public function process_event($event, $userid, $handle, $cookieid, $params)
     {
@@ -28,7 +31,7 @@ class qa_slack
                 $eventDescription = 'fazer uma pergunta: `' . $params['title'] . "` <" . $this->siteUrl . $params['postid'] . "|" . $this->linkMessage . ">";
                 break;
             case 'a_post':
-                $eventDescription = 'responder ' . ($params['parent']['handle'] == $handle ? 'sua própria' : $params['parent']['handle'] . "") . " pergunta `" . $params['parent']['title'] . "` <" . $this->siteUrl . $params['parent']['postid'] . "|" . $this->linkMessage . ">";
+                $eventDescription = 'responder ' . ($params['parent']['handle'] == $handle ? 'sua própria' : $params['parent']['handle'] . "") . " pergunta: `" . $params['parent']['title'] . "` <" . $this->siteUrl . $params['parent']['postid'] . "|" . $this->linkMessage . ">";
                 break;
             case 'c_post':
                 /*
@@ -36,32 +39,27 @@ class qa_slack
                 $eventDescription = 'commented on ' . ($params['parent']['handle'] == $handle ? 'their own' : $params['parent']['handle'] . "'s") . " $type `" . $params['question']['title'] . "`\n<" . $this->siteUrl . $params['questionid'] . "|" . $this->linkMessage . ">";
                 break;
                 */
-                return;
             case 'q_edit':
                 /*
                 $eventDescription = 'edited ' . ($params['oldquestion']['handle'] == $handle ? 'their own' : $params['oldquestion']['handle'] . "'s") . " question `" . $params['title'] . "`\n<" . $this->siteUrl . $params['oldquestion']['postid'] . "|" . $this->linkMessage . ">";
                 break;
                 */
-                return;
             case 'a_edit':
                 /*
                 $eventDescription = 'edited ' . ($params['oldanswer']['handle'] == $handle ? 'their own' : $params['oldanswer']['handle'] . "'s") . " answer for `" . $params['parent']['title'] . "`\n<" . $this->siteUrl . $params['parent']['postid'] . "|" . $this->linkMessage . ">";
                 break;
                 */
-                return;
             case 'c_edit':
                 /*
                 $type = ($params['parenttype'] == 'A') ? 'answer for question' : $type = 'question';
                 $eventDescription = 'edited ' . ($params['oldcomment']['handle'] == $handle ? 'their own' : $params['oldcomment']['handle'] . "'s") . ' comment on ' . ($params['parent']['handle'] == $handle ? 'their own' : $params['parent']['handle'] . "'s") . " $type `" . $params['question']['title'] . "`\n<" . $this->siteUrl . $params['questionid'] . "|" . $this->linkMessage . ">";
                 break;
                 */
-                return;
             case 'a_select':
                 /*
                 $eventDescription = 'selected ' . ($params['answer']['handle'] == $handle ? 'their own' : $params['answer']['handle'] . "'s") . " answer for " . ($params['parent']['handle'] == $handle ? 'their own' : $params['parent']['handle'] . "'s") . " question `" . $params['parent']['title'] . "`\n<" . $this->siteUrl . $params['parent']['postid'] . "|" . $this->linkMessage . ">";
                 break;
                 */
-                return;
         }
 
         if (null === $eventDescription) {
